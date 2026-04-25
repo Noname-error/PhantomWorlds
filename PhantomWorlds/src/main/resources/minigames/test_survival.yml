@@ -1,0 +1,154 @@
+# Test Survival Minigame Configuration
+# Simple survival test to validate event system, timer system, and basic gameplay flow
+minigame:
+  type: TEST_SURVIVAL
+  category: PVP
+  displayName: "Test Survival"
+  description: "Survive as long as you can! Last player standing wins!"
+  
+  # Game settings
+  maxPlayers: 10
+  minPlayers: 2
+  teams: 1  # Free for all
+  gameTime: 60  # 60 seconds default
+  
+  # Win condition
+  winCondition:
+    type: TIME_LIMIT
+    value: 60  # Game duration in seconds
+  
+  # Required regions (must be defined in template)
+  regions:
+    lobby:
+      type: LOBBY
+      description: "Waiting area before game starts"
+    game:
+      type: GAME
+      description: "Main survival arena"
+    spectator:
+      type: SPECTATOR
+      description: "Area for eliminated players"
+    spawn:
+      type: TEAM_SPAWN
+      description: "Player spawn points in arena"
+  
+  # Spawn locations
+  spawns:
+    players: "spawn"
+    spectator: "spectator"
+    lobby: "lobby"
+  
+  # Game modifiers
+  modifiers:
+    startingWeapon: STONE_SWORD
+    respawnTime: -1     # No respawning
+    friendlyFire: true   # Free for all
+    fallDamage: true
+    keepInventory: false
+    pvpEnabled: true
+  
+  # Event triggers for testing event system
+  eventTriggers:
+    onGameStart:
+      - action: BROADCAST
+        message: "§aTest Survival started! Survive for {gameTime} seconds!"
+      - action: BROADCAST
+        message: "§eLast player standing wins!"
+      - action: GIVE_ITEM
+        target: "all"
+        item: STONE_SWORD
+        amount: 1
+      - action: SOUND
+        sound: ENTITY_EXPERIENCE_ORB_PICKUP
+        volume: 1.0
+        pitch: 1.0
+    
+    onPlayerDeath:
+      - action: MESSAGE
+        target: "{player}"
+        message: "§cYou have been eliminated!"
+      - action: BROADCAST
+        message: "§c{player} has been eliminated! {alivePlayers} players remaining!"
+      - action: CLEAR_INVENTORY
+        target: "{player}"
+      - action: TELEPORT
+        target: "{player}"
+        destination: "spectator"
+      - action: SOUND
+        sound: ENTITY_WITHER_DEATH
+        volume: 0.5
+        pitch: 1.0
+    
+    onTimerTick:
+      # Timer warnings at specific times
+      - condition: "timeRemaining == 10"
+        actions:
+          - action: BROADCAST
+            message: "§e10 seconds remaining!"
+          - action: SOUND
+            sound: BLOCK_NOTE_BLOCK_PLING
+            volume: 0.5
+            pitch: 1.0
+      
+      - condition: "timeRemaining == 5"
+        actions:
+          - action: BROADCAST
+            message: "§c5 seconds remaining!"
+          - action: SOUND
+            sound: BLOCK_NOTE_BLOCK_PLING
+            volume: 0.7
+            pitch: 1.2
+      
+      - condition: "timeRemaining <= 3 && timeRemaining >= 1"
+        actions:
+          - action: BROADCAST
+            message: "§c{timeRemaining} second{timeRemaining == 1 ? '' : 's'} remaining!"
+          - action: SOUND
+            sound: BLOCK_NOTE_BLOCK_PLING
+            volume: 0.8
+            pitch: 1.5
+    
+    onGameEnd:
+      - action: BROADCAST
+        message: "§6Test Survival ended!"
+      - action: FIREWORK
+        location: "winner"
+        count: 5
+      - action: SOUND
+        sound: ENTITY_FIREWORK_ROCKET_BLAST
+        volume: 1.0
+        pitch: 1.0
+      - action: TELEPORT_ALL
+        destination: "lobby"
+        delay: 5
+
+# Scoreboard configuration for testing
+scoreboard:
+  title: "§c§lTest Survival"
+  lines:
+    - "§7"
+    - "§7Alive: §f{alivePlayers}"
+    - "§7Time: §f{time}s"
+    - "§7"
+    - "§7Survive to win!"
+    - "§7Last player standing"
+
+# Messages for testing
+messages:
+  join: "§aYou joined Test Survival! Survive as long as you can!"
+  leave: "§cYou left Test Survival!"
+  gameStart: "§aGame starting in {countdown} seconds!"
+  eliminated: "§cYou have been eliminated! You are now a spectator."
+  timeWarning: "§e{time} seconds remaining!"
+  win: "§6You won Test Survival! Congratulations!"
+  lose: "§cYou didn't survive this time!"
+  timeUp: "§cTime's up! Game ended!"
+
+# Test configuration options
+test:
+  validateEventSystem: true
+  validateTimerSystem: true
+  validateWinConditions: true
+  validatePlayerHandling: true
+  enableDebugLogging: true
+  performanceMonitoring: true

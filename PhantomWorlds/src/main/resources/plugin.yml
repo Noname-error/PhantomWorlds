@@ -1,0 +1,130 @@
+name: PhantomWorlds
+version: '1.0.0'
+main: com.phantomworlds.PhantomWorlds
+api-version: 1.20
+author: PhantomWorlds Team
+description: A modular Paper plugin that provides instanced worlds for dungeons and minigames
+website: https://github.com/PhantomWorlds/PhantomWorlds
+
+commands:
+  party:
+    description: Party management commands
+    usage: /party <create|invite|accept|decline|leave|kick|list|ready|start>
+    permission: phantomworlds.party.use
+    aliases: [p]
+    tab-completer: com.phantomworlds.commands.PartyCommand
+  
+  template:
+    description: Template management commands
+    usage: /template <create|list|info|delete|marker|region>
+    permission: phantomworlds.template.use
+    aliases: [tpl]
+    tab-completer: com.phantomworlds.commands.TemplateCommand
+  
+  instance:
+    description: Instance management commands
+    usage: /instance <create|join|leave|list|info|end|teleport>
+    permission: phantomworlds.instance.use
+    aliases: [inst]
+    tab-completer: com.phantomworlds.commands.InstanceCommand
+  
+  phantomworlds:
+    description: Admin commands for PhantomWorlds
+    usage: /phantomworlds <reload|stats|cleanup|debug|help>
+    permission: phantomworlds.admin
+    aliases: [pw]
+    tab-completer: com.phantomworlds.commands.PhantomWorldsCommand
+
+permissions:
+  phantomworlds.*:
+    description: All PhantomWorlds permissions
+    children:
+      phantomworlds.party.*: true
+      phantomworlds.template.*: true
+      phantomworlds.instance.*: true
+      phantomworlds.admin: true
+    default: op
+  
+  phantomworlds.party.*:
+    description: All party permissions
+    children:
+      phantomworlds.party.use: true
+      phantomworlds.party.create: true
+      phantomworlds.party.invite: true
+      phantomworlds.party.kick: true
+      phantomworlds.party.start: true
+    default: true
+  
+  phantomworlds.party.use:
+    description: Use basic party commands
+    default: true
+  
+  phantomworlds.party.create:
+    description: Create parties
+    default: true
+  
+  phantomworlds.party.invite:
+    description: Invite players to parties
+    default: true
+  
+  phantomworlds.party.kick:
+    description: Kick players from parties
+    default: true
+  
+  phantomworlds.party.start:
+    description: Start instances with parties
+    default: true
+  
+  phantomworlds.template.*:
+    description: All template permissions
+    children:
+      phantomworlds.template.use: true
+      phantomworlds.template.create: true
+      phantomworlds.template.delete: true
+      phantomworlds.template.modify: true
+    default: op
+  
+  phantomworlds.template.use:
+    description: Use templates
+    default: true
+  
+  phantomworlds.template.create:
+    description: Create templates
+    default: op
+  
+  phantomworlds.template.delete:
+    description: Delete templates
+    default: op
+  
+  phantomworlds.template.modify:
+    description: Modify templates
+    default: op
+  
+  phantomworlds.instance.*:
+    description: All instance permissions
+    children:
+      phantomworlds.instance.use: true
+      phantomworlds.instance.create: true
+      phantomworlds.instance.end: true
+      phantomworlds.instance.admin: true
+    default: true
+  
+  phantomworlds.instance.use:
+    description: Use instances
+    default: true
+  
+  phantomworlds.instance.create:
+    description: Create instances
+    default: true
+  
+  phantomworlds.instance.end:
+    description: End instances
+    default: op
+  
+  phantomworlds.instance.admin:
+    description: Admin instance commands
+    default: op
+  
+  phantomworlds.admin:
+    description: Admin commands for PhantomWorlds
+    default: op

@@ -1,0 +1,92 @@
+# Last Man Standing Minigame Configuration
+minigame:
+  type: LAST_MAN_STANDING
+  category: PVP
+  displayName: "Last Man Standing"
+  description: "Be the last player alive to win!"
+  
+  # Game settings
+  maxPlayers: 8
+  minPlayers: 2
+  teams: 1  # Free for all
+  gameTime: 300  # 5 minutes in seconds
+  
+  # Win condition
+  winCondition:
+    type: LAST_ALIVE
+    value: 1  # Last player standing wins
+  
+  # Required regions
+  regions:
+    lobby:
+      type: LOBBY
+      description: "Waiting area before game starts"
+    game:
+      type: GAME
+      description: "Battle arena"
+    spectator:
+      type: SPECTATOR
+      description: "Area for eliminated players"
+    spawn:
+      type: TEAM_SPAWN
+      description: "Player spawn points"
+  
+  # Spawn locations
+  spawns:
+    players: "spawn"
+    spectator: "spectator"
+    lobby: "lobby"
+  
+  # Game modifiers
+  modifiers:
+    respawnTime: -1     # No respawning
+    friendlyFire: true   # Free for all
+    fallDamage: true
+    keepInventory: false
+    shrinkingBorder: true
+    borderShrinkTime: 60  # Border shrinks every 60 seconds
+    minBorderSize: 50    # Minimum border size
+  
+  # Event triggers
+  eventTriggers:
+    onPlayerDeath:
+      - action: BROADCAST
+        message: "§c{player} was eliminated by {killer}! {remaining} players remaining."
+      - action: TELEPORT
+        target: "{player}"
+        destination: "spectator"
+    
+    onGameStart:
+      - action: BROADCAST
+        message: "§aLast Man Standing started! Be the last player alive!"
+      - action: SOUND
+        sound: ENTITY_EXPERIENCE_ORB_PICKUP
+        volume: 1.0
+        pitch: 1.0
+    
+    onGameEnd:
+      - action: BROADCAST
+        message: "§6Game ended! Winner: {winner}"
+      - action: FIREWORK
+        location: "{winner}"
+        count: 10
+
+# Scoreboard configuration
+scoreboard:
+  title: "§c§lLast Man Standing"
+  lines:
+    - "§7"
+    - "§7Alive: §f{alive_players}"
+    - "§7Time: §f{time}"
+    - "§7Border: §f{border_size}x{border_size}"
+    - "§7"
+    - "§7Kills: §f{kills}"
+
+# Messages
+messages:
+  join: "§aYou joined Last Man Standing!"
+  leave: "§cYou left the game."
+  gameStart: "§aGame starting in {countdown} seconds!"
+  eliminated: "§cYou were eliminated! You are now a spectator."
+  win: "§6You are the Last Man Standing! Congratulations!"
+  borderShrinking: "§eThe border is shrinking! Move to the safe zone!"

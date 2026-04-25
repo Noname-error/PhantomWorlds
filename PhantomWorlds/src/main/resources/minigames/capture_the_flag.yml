@@ -1,0 +1,129 @@
+# Capture the Flag Minigame Configuration
+minigame:
+  type: CAPTURE_THE_FLAG
+  category: PVP
+  displayName: "Capture the Flag"
+  description: "Capture the enemy flag and bring it back to your base!"
+  
+  # Game settings
+  maxPlayers: 10
+  minPlayers: 2
+  teams: 2
+  gameTime: 600  # 10 minutes in seconds
+  
+  # Win condition
+  winCondition:
+    type: SCORE
+    value: 3  # First team to capture 3 flags wins
+  
+  # Required regions (must be defined in template)
+  regions:
+    lobby:
+      type: LOBBY
+      description: "Waiting area before game starts"
+    game:
+      type: GAME
+      description: "Main gameplay area"
+    spectator:
+      type: SPECTATOR
+      description: "Area for eliminated players"
+    team1_spawn:
+      type: TEAM_SPAWN
+      description: "Spawn point for team 1"
+    team2_spawn:
+      type: TEAM_SPAWN
+      description: "Spawn point for team 2"
+    team1_flag:
+      type: OBJECTIVE
+      description: "Flag location for team 1"
+    team2_flag:
+      type: OBJECTIVE
+      description: "Flag location for team 2"
+  
+  # Spawn locations (optional, can use region centers)
+  spawns:
+    team1: "team1_spawn"
+    team2: "team2_spawn"
+    spectator: "spectator"
+    lobby: "lobby"
+  
+  # Game modifiers
+  modifiers:
+    flagRespawnTime: 30  # Seconds until flag returns to base
+    respawnTime: 5      # Seconds until player respawns
+    friendlyFire: false  # Can teammates damage each other?
+    fallDamage: true     # Is fall damage enabled?
+    keepInventory: false # Keep items on death?
+  
+  # Event triggers
+  eventTriggers:
+    onFlagPickup:
+      - action: BROADCAST
+        message: "{player} picked up the {team} flag!"
+      - action: SOUND
+        sound: ENTITY_ITEM_PICKUP
+        volume: 1.0
+        pitch: 1.0
+    
+    onFlagCapture:
+      - action: BROADCAST
+        message: "{player} captured the flag for {team}!"
+      - action: SOUND
+        sound: ENTITY_PLAYER_LEVELUP
+        volume: 1.0
+        pitch: 1.0
+      - action: FIREWORK
+        location: "{player}"
+        count: 3
+    
+    onPlayerDeath:
+      - action: MESSAGE
+        target: "{player}"
+        message: "You were eliminated by {killer}!"
+      - action: TELEPORT
+        target: "{player}"
+        destination: "spectator"
+    
+    onGameStart:
+      - action: BROADCAST
+        message: "Capture the Flag started! First to 3 captures wins!"
+      - action: SOUND
+        sound: ENTITY_EXPERIENCE_ORB_PICKUP
+        volume: 1.0
+        pitch: 1.0
+    
+    onGameEnd:
+      - action: BROADCAST
+        message: "Game ended! Winners: {winners}"
+      - action: SOUND
+        sound: ENTITY_FIREWORK_ROCKET_BLAST
+        volume: 1.0
+        pitch: 1.0
+      - action: TELEPORT_ALL
+        destination: "lobby"
+        delay: 5
+
+# Scoreboard configuration
+scoreboard:
+  title: "§6§lCapture the Flag"
+  lines:
+    - "§7"
+    - "§cTeam 1: §f{team1_score}/{win_score}"
+    - "§9Team 2: §f{team2_score}/{win_score}"
+    - "§7"
+    - "§7Players: §f{players}"
+    - "§7Time: §f{time}"
+    - "§7"
+    - "§7Your Team: §f{team}"
+
+# Messages
+messages:
+  join: "§aYou joined Capture the Flag!"
+  leave: "§cYou left the game."
+  gameStart: "§aGame starting in {countdown} seconds!"
+  flagPickup: "§aYou picked up the enemy flag! Bring it back to your base!"
+  flagCapture: "§6You captured the flag! +1 point for your team!"
+  flagDrop: "§cYou dropped the flag!"
+  eliminated: "§cYou were eliminated! You are now a spectator."
+  win: "§aYour team won the game!"
+  lose: "§cYour team lost the game!"

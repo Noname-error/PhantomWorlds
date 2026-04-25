@@ -1,0 +1,102 @@
+# Spleef Minigame Configuration
+minigame:
+  type: SPLEEF
+  category: SKILL
+  displayName: "Spleef"
+  description: "Break blocks under your opponents to make them fall!"
+  
+  # Game settings
+  maxPlayers: 8
+  minPlayers: 2
+  teams: 1  # Free for all
+  gameTime: 180  # 3 minutes
+  
+  # Win condition
+  winCondition:
+    type: LAST_ALIVE
+    value: 1  # Last player on the snow layer wins
+  
+  # Required regions
+  regions:
+    lobby:
+      type: LOBBY
+      description: "Waiting area"
+    game:
+      type: GAME
+      description: "Spleef arena with snow blocks"
+    spectator:
+      type: SPECTATOR
+      description: "Area below the arena"
+    spawn:
+      type: TEAM_SPAWN
+      description: "Player spawn points on arena"
+    void:
+      type: DANGER_ZONE
+      description: "Void area below arena"
+  
+  # Spawn locations
+  spawns:
+    players: "spawn"
+    spectator: "spectator"
+    lobby: "lobby"
+  
+  # Game modifiers
+  modifiers:
+    respawnTime: -1     # No respawning
+    tool: DIAMOND_SHOVEL # Tool for breaking blocks
+    blockType: SNOW_BLOCK # Blocks to break
+    fallDamage: false    # No fall damage in void
+    keepInventory: true  # Keep shovel on death
+    autoRegen: false     # Blocks don't regenerate during game
+  
+  # Event triggers
+  eventTriggers:
+    onBlockBreak:
+      - action: SOUND
+        sound: BLOCK_SNOW_BREAK
+        volume: 0.5
+        pitch: 1.0
+    
+    onPlayerFall:
+      - action: MESSAGE
+        target: "{player}"
+        message: "§cYou fell into the void! You are eliminated!"
+      - action: TELEPORT
+        target: "{player}"
+        destination: "spectator"
+      - action: BROADCAST
+        message: "§c{player} fell into the void! {remaining} players remaining."
+    
+    onGameStart:
+      - action: BROADCAST
+        message: "§aSpleef started! Break blocks under your opponents!"
+      - action: GIVE_ITEM
+        target: "all"
+        item: DIAMOND_SHOVEL
+        amount: 1
+    
+    onGameEnd:
+      - action: BROADCAST
+        message: "§6Spleef ended! Winner: {winner}"
+      - action: FIREWORK
+        location: "{winner}"
+        count: 5
+
+# Scoreboard configuration
+scoreboard:
+  title: "§b§lSpleef"
+  lines:
+    - "§7"
+    - "§7Alive: §f{alive_players}"
+    - "§7Time: §f{time}"
+    - "§7"
+    - "§7Blocks Broken: §f{blocks_broken}"
+
+# Messages
+messages:
+  join: "§aYou joined Spleef!"
+  leave: "§cYou left the game."
+  gameStart: "§aGame starting in {countdown} seconds!"
+  eliminated: "§cYou fell into the void! You are eliminated!"
+  win: "§6You won Spleef! Great job!"
+  toolGiven: "§aYou received a Diamond Shovel for breaking blocks!"

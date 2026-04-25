@@ -1,0 +1,187 @@
+# PhantomWorlds Configuration File
+
+# General Settings
+general:
+  debug: false
+  language: en
+  max_instances_per_server: 50
+  max_parties_per_server: 100
+
+# Instance Settings
+instance:
+  # Cleanup settings
+  cleanup_interval_minutes: 1
+  instance_timeout_minutes: 5
+  auto_delete_empty_instances: true
+  
+  # Performance settings
+  async_world_creation: true
+  max_concurrent_creations: 3
+  
+  # World settings
+  keep_spawn_loaded: true
+  allow_weather_changes: false
+  allow_time_changes: false
+
+# Template Settings
+template:
+  # Template folders
+  template_folder: "plugins/PhantomWorlds/templates"
+  world_template_folder: "plugins/PhantomWorlds/world_templates"
+  
+  # Auto-save settings
+  auto_save_templates: true
+  save_interval_minutes: 10
+  
+  # Validation settings
+  require_spawn_marker: true
+  validate_regions: true
+
+# Party Settings
+party:
+  # Party limits
+  max_party_size: 8
+  max_invites_per_player: 5
+  
+  # Timeout settings
+  invite_expire_minutes: 5
+  inactive_member_timeout_minutes: 10
+  
+  # Auto-disband settings
+  auto_disband_empty: true
+  auto_disband_inactive_minutes: 30
+
+# Lobby Settings
+lobby:
+  # Lobby world
+  lobby_world: "world"
+  lobby_location:
+    x: 0
+    y: 64
+    z: 0
+    yaw: 0
+    pitch: 0
+  
+  # Countdown settings
+  countdown_seconds: 30
+  min_players_to_start: 2
+  auto_start_when_ready: false
+
+# Modifier Settings
+modifiers:
+  # Default modifiers for different instance types
+  dungeon:
+    - health_multiplier: 1.5
+    - damage_multiplier: 1.2
+    - experience_multiplier: 1.5
+  
+  minigame:
+    - no_regeneration: true
+    - pvp_enabled: true
+  
+  survival:
+    - experience_multiplier: 1.2
+    - drop_multiplier: 1.1
+  
+  creative:
+    - no_damage: true
+    - instant_break: true
+  
+  pvp:
+    - no_regeneration: true
+    - speed_multiplier: 1.1
+
+# GUI Settings
+gui:
+  # GUI settings
+  enable_gui: true
+  close_on_escape: true
+  
+  # Inventory sizes
+  party_gui_size: 45
+  template_gui_size: 54
+  instance_gui_size: 36
+  
+  # Auto-refresh settings
+  auto_refresh_interval_seconds: 5
+
+# Database Settings (for future expansion)
+database:
+  enabled: false
+  type: sqlite
+  host: localhost
+  port: 3306
+  database: phantomworlds
+  username: user
+  password: password
+  table_prefix: pw_
+
+# Logging Settings
+logging:
+  log_level: INFO
+  log_instance_events: true
+  log_party_events: true
+  log_template_events: true
+  log_cleanup_events: true
+  
+  # File logging
+  enable_file_logging: true
+  log_file_path: "plugins/PhantomWorlds/logs/phantomworlds.log"
+  max_log_file_size_mb: 10
+  max_log_files: 5
+
+# Performance Settings
+performance:
+  # Threading
+  use_async_tasks: true
+  max_thread_pool_size: 4
+  
+  # Caching
+  enable_template_cache: true
+  cache_size: 100
+  cache_expire_minutes: 30
+  
+  # Memory management
+  cleanup_memory_interval_minutes: 5
+  force_gc_on_cleanup: false
+
+# Security Settings
+security:
+  # Permission checks
+  strict_permissions: true
+  log_permission_violations: true
+  
+  # World protection
+  protect_template_worlds: true
+  prevent_world_edit_in_instances: true
+  
+  # Player limits
+  max_instances_per_player: 3
+  max_templates_per_player: 10
+
+# Integration Settings
+integrations:
+  # WorldEdit integration
+  worldedit_enabled: false
+  worldedit_selection_for_regions: true
+  
+  # WorldGuard integration
+  worldguard_enabled: false
+  worldguard_regions_for_protection: true
+  
+  # PlaceholderAPI integration
+  placeholderapi_enabled: true
+  
+  # Vault integration
+  vault_enabled: false
+  economy_for_instance_creation: false
+  instance_creation_cost: 0.0
+
+# API Settings (for future expansion)
+api:
+  enabled: false
+  port: 8080
+  host: localhost
+  enable_web_interface: false
+  api_key: ""
+  rate_limit_per_minute: 60
